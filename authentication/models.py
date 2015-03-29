@@ -6,11 +6,12 @@ class AccountManager(BaseUserManager):
 	def create_user(self, email, password=None, **kwargs):
 		if not email:
 			raise ValueError('User must have a valid email address')
-		if not kwargs.get('username'):
-			raise ValueError('User must have a valid username')
+		UN = self.normalize_email(email)
+		if kwargs.get('username'):
+			UN = kwargs.get('username')
 
 		account = self.model(
-			email = self.normalize_email(email), username = kwargs.get('username')
+			email = self.normalize_email(email), username=UN
 		)
 
 		account.set_password(password)
@@ -27,7 +28,7 @@ class AccountManager(BaseUserManager):
 
 		
 
-class Account (AbstractBaseUser):
+class Account(AbstractBaseUser):
 	email = models.EmailField(unique=True)
 	username = models.CharField(max_length=40, unique=True)
 
@@ -43,7 +44,7 @@ class Account (AbstractBaseUser):
 	objects = AccountManager()
 
 	USERNAME_FIELD = 'email'
-	REQURIED_FIELDS = ['username']
+	REQURIED_FIELDS = ['username',]
 
 	def _unicode_(self):
 		return self.email
@@ -53,3 +54,4 @@ class Account (AbstractBaseUser):
 
 	def get_short_name(self):
 		return self.first_name
+
