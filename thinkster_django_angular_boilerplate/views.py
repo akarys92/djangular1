@@ -4,7 +4,10 @@ from django.utils.decorators import method_decorator
 
 
 class IndexView(TemplateView):
-    template_name = 'index.html'
+    template_name = "index.html"
+
+    def here():
+    	print "here!\n\n\n\n\n"
 
     @method_decorator(ensure_csrf_cookie)
     def dispatch(self, *args, **kwargs):
